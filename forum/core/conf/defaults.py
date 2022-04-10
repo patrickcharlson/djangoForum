@@ -30,6 +30,8 @@ REPUTATION_SUPPORT = True
 
 FORUM_PAGE_SIZE = 20
 
+POST_USER_SEARCH = 1
+
 # SMILE Extension
 SMILES_SUPPORT = True
 EMOTION_SMILE = f'<img src="{STATIC_URL}forum/img/smilies/smile.png"/>'

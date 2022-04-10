@@ -1,12 +1,15 @@
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 
-from forum.core.conf import settings
-from forum.core.utils import convert_text_to_html, smiles, get_page
-from forum.models import Forum, Post, Category
+from .core.conf import settings
+from .core.utils import convert_text_to_html, smiles, get_page, build_form
+from .forms import EssentialsProfileForm
+from .models import Forum, Post, Category, Topic
 
 User = get_user_model()
 
@@ -39,6 +42,7 @@ def index(request):
     context = {
         'categories': categories,
         'posts': Post.objects.count(),
+        'topics': Topic.objects.count(),
         'users': User.objects.count(),
         'users_online': users_online,
         'online_count': users_count,
@@ -69,6 +73,32 @@ def show_forum(request, forum_id):
     }
 
     return render(request, 'forum/forum.html', context)
+
+
+def user(request, username, section='essentials'):
+    form_class = EssentialsProfileForm
+    template = 'forum/profile/profile_essentials'
+    _user = get_object_or_404(User, username=username)
+    if request.user.is_authenticated and _user == request.user or request.user.is_superuser:
+        form = build_form(form_class, request, instance=_user.forum_profile, extra_args={'request': request})
+        if request.method == 'POST' and form.is_valid():
+            form.save()
+            profile_url = reverse(f'forum:forum_profile_{section}', args=[_user.username])
+            messages.success(request, 'User profile saved.')
+            return redirect(profile_url)
+
+        context = {'active_menu': section, 'profile': _user, 'form': form}
+        return render(request, template, context)
+
+    else:
+        template = 'forum/user.html'
+        topic_count = Topic.objects.filter(user__id=_user.id).count()
+        if _user.forum_profile.post_count < settings.POST_USER_SEARCH and not request.user.is_authenticated:
+            messages.error(request, 'Please sign in.')
+            return redirect(settings.LOGIN_URL + f'?next={request.path}')
+
+        context = {'profile': user, 'topic_count': topic_count}
+        return render(request, template, context, context)
 
 
 def post_preview(request):

@@ -4,7 +4,7 @@ from django.http import Http404
 from django.urls import reverse
 from django.utils.feedgenerator import Atom1Feed
 
-from .models import Forum, Post, Topic
+from forum.models import Forum, Post, Topic
 
 
 class ForumFeed(Feed):

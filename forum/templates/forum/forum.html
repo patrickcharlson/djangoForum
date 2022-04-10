@@ -1,4 +1,5 @@
 {% extends 'forum/base.html' %}
+{% load static %}
 {% load forum_extras i18n %}
 
 {% block title %}{{ forum.name }} / {% endblock %}
@@ -20,7 +21,7 @@
   <div id="vf" class="blocktable">
     <h2>
       <a href="{% url 'forum:forum_forum_feed' forum.id %}"><img
-        src="{{ STATIC_URL }}djangobb_forum/img/feed-icon-small.png" alt="[RSS Feed]" title="[RSS Feed]"
+        src="{% static 'forum/img/feed-icon-small.png' %}" alt="[RSS Feed]" title="[RSS Feed]"
         class="rss"/></a>
       <b><span>{{ forum.name }}</span></b>
     </h2>

@@ -15,7 +15,7 @@ class AutoReverseOneToOneDescriptor(ReverseOneToOneDescriptor):
         try:
             return super().__get__(instance, instance_type)
         except model.DoesNotExist:
-            obj = model(**{self.related.field_name: instance})
+            obj = model(**{self.related.field.name: instance})
             obj.save()
             return super().__get__(instance, instance_type)
 

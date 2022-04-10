@@ -2,6 +2,7 @@ import os
 
 import pytz
 from django.db import models
+from django.db.models import OneToOneField
 
 from ..core.conf import settings
 from ..core.fields import ExtendedImageField, AutoOneToOneField

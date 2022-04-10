@@ -24,6 +24,16 @@ def get_page(objects, request, size):
         return None
 
 
+def build_form(Form, request, GET=False, *args, **kwargs):
+    if not GET and 'POST' == request.method:
+        form = Form(request.POST, request.FILES, *args, **kwargs)
+    elif GET and 'GET' == request.method:
+        form = Form(request.GET, request.FILES, *args, **kwargs)
+    else:
+        form = Form(*args, **kwargs)
+    return form
+
+
 class HTMLFilter(HTMLParser):
 
     def __init__(self):

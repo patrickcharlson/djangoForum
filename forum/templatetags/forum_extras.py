@@ -1,6 +1,7 @@
 from django import template
 from django.conf import settings
 from django.contrib.humanize.templatetags.humanize import naturalday
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.encoding import smart_str
 from django.utils.html import escape
@@ -11,7 +12,7 @@ register = template.Library()
 
 @register.filter
 def profile_link(user):
-    data = '<a href="%s">%s</a>'
+    data = f'<a href="{reverse("forum:forum_profile", args=[user.username])}">{user.username}</a>'
     return mark_safe(data)
 
 

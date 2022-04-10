@@ -1,13 +1,16 @@
 from django.urls import path
 
 from forum import views
-from forum.feeds import LastPosts, LastTopics, LastPostsOnForum
+from forum.core.feeds import LastPosts, LastTopics, LastPostsOnForum
 
 app_name = 'forum'
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('forum/<int:forum_id>/', views.show_forum, name='forum'),
+
+    # User
+    path('user/<username>/', views.user, name='forum_profile'),
 
     # Feeds
     path('feeds/posts/', LastPosts(), name='forum_posts_feed'),
