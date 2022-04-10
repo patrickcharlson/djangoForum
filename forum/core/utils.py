@@ -5,6 +5,7 @@ from html.parser import HTMLParser
 from typing import List, Tuple
 
 import markdown
+from django.core.paginator import Paginator, InvalidPage
 from django.utils.html import urlize
 
 from forum.core.conf import settings
@@ -14,6 +15,13 @@ _SMILES = [(re.compile(smile_re), path) for smile_re, path in settings.SMILES]
 
 class HTMLParseError(Exception):
     ...
+
+
+def get_page(objects, request, size):
+    try:
+        return Paginator(objects, size).page(request.GET.get('page', 1))
+    except InvalidPage:
+        return None
 
 
 class HTMLFilter(HTMLParser):

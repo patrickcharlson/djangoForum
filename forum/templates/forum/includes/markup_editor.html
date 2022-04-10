@@ -1,0 +1,7 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static  'forum/js/markitup/skins/markitup/style.css' %}"/>
+<link rel="stylesheet" href="{% static 'forum/js/markitup/sets/{{ markup }}/style.css' %}"/>
+<script src="{% static 'forum/js/markitup/jquery.markitup.pack.js' %}"></script>
+<script src="{% static 'forum/js/markitup/sets/{{ markup }}/set.js' %}"></script>
+<script src="{% static 'forum/js/markup/{{ markup }}/board.js' %}"></script>

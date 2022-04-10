@@ -4,7 +4,7 @@ from django.db import models
 
 class Category(models.Model):
     name = models.CharField('Name', max_length=80)
-    groups = models.ManyToManyField(Group, blank=True, verbose_name='True')
+    groups = models.ManyToManyField(Group, blank=True, verbose_name='Groups')
     position = models.IntegerField('Position', blank=True, default=0)
 
     class Meta:

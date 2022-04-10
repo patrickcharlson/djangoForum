@@ -1,7 +1,8 @@
 from django.db import models
+from django.urls import reverse
 
 from ..core.conf import settings
-from ..fields import ExtendedImageField
+from ..core.fields import ExtendedImageField
 from ..models.post import Post
 
 
@@ -30,6 +31,9 @@ class Forum(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('forum:forum', args=[self.id])
 
     @property
     def posts(self):

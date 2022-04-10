@@ -4,7 +4,7 @@ import pytz
 from django.db import models
 
 from ..core.conf import settings
-from ..fields import AutoOneToOneField, ExtendedImageField
+from ..core.fields import ExtendedImageField, AutoOneToOneField
 
 TZ_CHOICES = [(tz_name, tz_name) for tz_name in pytz.common_timezones]
 
@@ -29,6 +29,25 @@ if os.path.exists(path):
                      if os.path.isdir(os.path.join(path, theme))]
 else:
     THEME_CHOICES = []
+
+
+class ProfileManager(models.Manager):
+    use_for_related_fields = True
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if settings.REPUTATION_SUPPORT:
+            qs = qs.extra(select={
+                'reply_total': 'SELECT SUM(sign) FROM reputations WHERE to_user_id = '
+                               'users.user_id GROUP BY to_user_id',
+
+                'reply_count_minus': "SELECT SUM(sign) FROM reputations WHERE to_user_id = "
+                                     "users.user_id AND sign = '-1' GROUP BY to_user_id",
+
+                'reply_count_plus': "SELECT SUM(sign) FROM reputations WHERE to_user_id = "
+                                    "users.user_id AND sign = '1' GROUP BY to_user_id",
+            })
+        return qs
 
 
 class Profile(models.Model):
@@ -60,6 +79,8 @@ class Profile(models.Model):
     markup = models.CharField('Default markup', max_length=15, default=settings.DEFAULT_MARKUP,
                               choices=MARKUP_CHOICES)
     post_count = models.IntegerField('Post count', blank=True, default=0)
+
+    objects = ProfileManager()
 
     class Meta:
         db_table = 'users'

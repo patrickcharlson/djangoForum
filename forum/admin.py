@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Post, Topic
+from .models import Post, Topic, Forum, Category
 
 
 class BaseModelAdmin(admin.ModelAdmin):
@@ -10,6 +10,17 @@ class BaseModelAdmin(admin.ModelAdmin):
         if 'delete_selected' in actions:
             del actions['delete_selected']
         return actions
+
+
+@admin.register(Category)
+class CategoryAdmin(BaseModelAdmin):
+    list_display = ['name', 'position', 'forum_count']
+
+
+@admin.register(Forum)
+class ForumAdmin(BaseModelAdmin):
+    list_display = ['name', 'category', 'position', 'topic_count']
+    raw_id_fields = ['moderators', 'last_post']
 
 
 @admin.register(Topic)

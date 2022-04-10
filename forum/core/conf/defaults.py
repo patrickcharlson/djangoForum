@@ -26,6 +26,10 @@ JQUERY_URL = '//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js'
 
 NOFOLLOW_LINKS = True
 
+REPUTATION_SUPPORT = True
+
+FORUM_PAGE_SIZE = 20
+
 # SMILE Extension
 SMILES_SUPPORT = True
 EMOTION_SMILE = f'<img src="{STATIC_URL}forum/img/smilies/smile.png"/>'

@@ -24,6 +24,9 @@ class Post(models.Model):
         verbose_name = 'Post'
         verbose_name_plural = 'Posts'
 
+    def __str__(self):
+        return self.summary
+
     @property
     def summary(self):
         LIMIT = 50

@@ -9,7 +9,7 @@ class Topic(models.Model):
     forum = models.ForeignKey('forum.Forum', related_name='topics', verbose_name='Forum', on_delete=models.CASCADE)
     name = models.CharField('Subject', max_length=255)
     created = models.DateTimeField('Created', auto_now_add=True)
-    updated = models.DateTimeField('Updated', null=True)
+    updated = models.DateTimeField('Updated', blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='User', on_delete=models.CASCADE)
     views = models.IntegerField('Views count', blank=True, default=0)
     sticky = models.BooleanField('Sticky', blank=True, default=False)

@@ -16,11 +16,14 @@
         title="{% trans "Latest topics on forum" %}"/>
 
   <link rel="shortcut icon" href="{% static 'forum/favicon.png' %}" type="image/png"/>
+
   <script>
     var STATIC_URL = "{{ STATIC_URL }}";
     var POST_PREVIEW_URL = "{% url 'forum:post_preview' %}";
   </script>
+
   <script src="{{ forum_settings.JQUERY_URL }}"></script>
+
   {% if user.is_authenticated %}
     {% if post %}
       {% with markup=post.markup %}
@@ -31,22 +34,27 @@
         {% include "forum/includes/markup_editor.html" %}
       {% endwith %}
     {% endif %}
-    <script type="text/javascript">
+
+    <script>
       $(document).ready(function () {
         $(".markup").markItUp(mySettings);
       });
     </script>
+
   {% endif %}
 
   <!-- Highlightjs goodies -->
-  <link type="text/css" rel="stylesheet" href="{% static 'forum/css/pygments.css' %}"/>
+  <link rel="stylesheet" href="{% static 'forum/css/pygments.css' %}"/>
   {% if highlight_word %}
+
     <script src="{% static 'forum/js/jquery.highlight-3.pack.js' %}"></script>
+
     <script>
       $(document).ready(function () {
         $("div.postmsg").highlight("{{ highlight_word }}");
       });
     </script>
+
   {% endif %}
   {% block extra_meta %}{% endblock %}
 </head>
@@ -100,7 +108,5 @@
     </div>
   </div>
 </div>
-{#</div>#}
-{#</div>#}
 </body>
 </html>

@@ -2,6 +2,8 @@ from django import template
 from django.conf import settings
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.utils import timezone
+from django.utils.encoding import smart_str
+from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
 register = template.Library()
@@ -35,8 +37,27 @@ class ForumTimeNode(template.Node):
 
 
 @register.simple_tag
+def link(obj, anchor=''):
+    """Return a tag with link to object"""
+    url = hasattr(obj, 'get_absolute_url') and obj.get_absolute_url() or None
+    anchor = anchor or smart_str(obj)
+    return mark_safe(f'<a href="{url}">{escape(anchor)}</a>')
+
+
+@register.filter
+def has_unreads(topic, user):
+    ...
+
+
+@register.simple_tag
 def new_reports():
     ...
+
+
+@register.filter
+def forum_unreads(forum, user):
+    if not user.is_authenticated:
+        return False
 
 
 @register.simple_tag
