@@ -11,6 +11,7 @@ markdown = "*"
 psycopg2-binary = "*"
 
 [dev-packages]
+django-debug-toolbar = "*"
 
 [requires]
 python_version = "3.8"

@@ -7,6 +7,7 @@ from typing import List, Tuple
 import markdown
 from django.core.paginator import Paginator, InvalidPage
 from django.utils.html import urlize
+from django.utils.translation import check_for_language
 
 from forum.core.conf import settings
 
@@ -32,6 +33,13 @@ def build_form(Form, request, GET=False, *args, **kwargs):
     else:
         form = Form(*args, **kwargs)
     return form
+
+
+def set_language(request, language):
+    """Change the language of session of authenticated user."""
+
+    if check_for_language(language):
+        request.session['django_language'] = language
 
 
 class HTMLFilter(HTMLParser):

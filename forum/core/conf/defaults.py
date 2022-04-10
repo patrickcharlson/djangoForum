@@ -30,7 +30,15 @@ REPUTATION_SUPPORT = True
 
 FORUM_PAGE_SIZE = 20
 
+USERS_PAGE_SIZE = 20
+
 POST_USER_SEARCH = 1
+
+HEADER = 'DjangoBB'
+
+TAGLINE = 'Django based forum engine'
+
+NOTICE = ''
 
 # SMILE Extension
 SMILES_SUPPORT = True

@@ -11,8 +11,8 @@
         <div id="brdmenu" class="inbox">
           <ul>
             {% block menu %}
-              <li id="navindex"><a href="">{% trans "Index" %}</a></li>
-              <li id="navuserlist"><a href="">{% trans "User list" %}</a></li>
+              <li id="navindex"><a href="{% url 'forum:index' %}">{% trans "Index" %}</a></li>
+              <li id="navuserlist"><a href="{% url 'forum:forum_users' %}">{% trans "User list" %}</a></li>
               <li id="navsearch"><a href="">{% trans "Search" %}</a></li>
               {% if user.is_superuser %}
                 <li id="navadmin"><a href="">{% trans "Administration" %}</a></li>

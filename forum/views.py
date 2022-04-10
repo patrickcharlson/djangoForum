@@ -8,7 +8,7 @@ from django.urls import reverse
 
 from .core.conf import settings
 from .core.utils import convert_text_to_html, smiles, get_page, build_form
-from .forms import EssentialsProfileForm
+from .forms import EssentialsProfileForm, UserSearchForm
 from .models import Forum, Post, Category, Topic
 
 User = get_user_model()
@@ -77,7 +77,7 @@ def show_forum(request, forum_id):
 
 def user(request, username, section='essentials'):
     form_class = EssentialsProfileForm
-    template = 'forum/profile/profile_essentials'
+    template = 'forum/profile/profile_essentials.html'
     _user = get_object_or_404(User, username=username)
     if request.user.is_authenticated and _user == request.user or request.user.is_superuser:
         form = build_form(form_class, request, instance=_user.forum_profile, extra_args={'request': request})
@@ -99,6 +99,14 @@ def user(request, username, section='essentials'):
 
         context = {'profile': user, 'topic_count': topic_count}
         return render(request, template, context, context)
+
+
+def users(request):
+    _users = User.objects.filter(forum_profile__post_count__gte=settings.POST_USER_SEARCH).order_by('username')
+    form = UserSearchForm(request.GET)
+    _users = form.filter(_users)
+    context = {'users_page': get_page(_users, request, settings.USERS_PAGE_SIZE)}
+    return render(request, 'forum/users.html', context)
 
 
 def post_preview(request):

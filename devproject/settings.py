@@ -39,7 +39,7 @@ SECRET_KEY = get_secret('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -53,9 +53,14 @@ INSTALLED_APPS = [
 
     # Local Apps
     'forum',
+
+    # Third Party
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -157,4 +162,6 @@ STATICFILES_DIRS = [BASE_DIR, 'forum/static']
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/forum/account/signin/'
+
+INTERNAL_IPS = ['127.0.0.1', 'localhost']
 

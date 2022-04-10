@@ -11,6 +11,7 @@ urlpatterns = [
 
     # User
     path('user/<username>/', views.user, name='forum_profile'),
+    path('users/', views.users, name='forum_users'),
 
     # Feeds
     path('feeds/posts/', LastPosts(), name='forum_posts_feed'),
