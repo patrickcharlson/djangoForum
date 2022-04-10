@@ -23,3 +23,9 @@ class Post(models.Model):
         get_latest_by = 'created'
         verbose_name = 'Post'
         verbose_name_plural = 'Posts'
+
+    @property
+    def summary(self):
+        LIMIT = 50
+        tail = len(self.body) > LIMIT and '...' or ''
+        return self.body[:LIMIT] + tail

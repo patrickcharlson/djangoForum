@@ -3,9 +3,8 @@ import os
 import pytz
 from django.db import models
 
-from forum.core.conf import settings
-from forum.fields import AutoOneToOneField, ExtendedImageField
-from forum.models.post import Post
+from ..core.conf import settings
+from ..fields import AutoOneToOneField, ExtendedImageField
 
 TZ_CHOICES = [(tz_name, tz_name) for tz_name in pytz.common_timezones]
 
@@ -66,10 +65,3 @@ class Profile(models.Model):
         db_table = 'users'
         verbose_name = 'Profile'
         verbose_name_plural = 'Profiles'
-
-    def last_post(self):
-        posts = Post.objects.filter(user__id=self.user_id).order_by('-created')
-        if posts:
-            return posts[0].created
-        else:
-            return None

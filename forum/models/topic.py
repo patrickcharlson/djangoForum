@@ -2,6 +2,9 @@ from django.conf import settings
 from django.db import models
 
 
+# from forum.models import Post
+
+
 class Topic(models.Model):
     forum = models.ForeignKey('forum.Forum', related_name='topics', verbose_name='Forum', on_delete=models.CASCADE)
     name = models.CharField('Subject', max_length=255)
@@ -27,7 +30,9 @@ class Topic(models.Model):
     def __str__(self):
         return self.name
 
-    def delete(self, *args, **kwargs):
+    @property
+    def head(self):
         try:
-            last_post = self.posts.latest()
-            last_post.last_forum_post.clear()
+            return self.posts.select_related().order_by('created')[0]
+        except IndexError:
+            return None

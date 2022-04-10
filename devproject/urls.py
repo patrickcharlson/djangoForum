@@ -20,7 +20,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('forum/', include('forum.urls', namespace='forum')),
+    path('', include('forum.urls', namespace='forum')),
 ]
 
 # Use static file server for static and media files (debug only)
