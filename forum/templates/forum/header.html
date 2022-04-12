@@ -15,7 +15,7 @@
               <li id="navuserlist"><a href="{% url 'forum:forum_users' %}">{% trans "User list" %}</a></li>
               <li id="navsearch"><a href="">{% trans "Search" %}</a></li>
               {% if user.is_superuser %}
-                <li id="navadmin"><a href="">{% trans "Administration" %}</a></li>
+                <li id="navadmin"><a href="{% url 'admin:index' %}">{% trans "Administration" %}</a></li>
               {% endif %}
               {% if user.is_authenticated %}
                 <li id="navprofile"><a href="{% url 'forum:forum_profile' user.username %}">{% trans "Profile" %}</a>

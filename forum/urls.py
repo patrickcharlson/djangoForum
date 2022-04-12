@@ -9,7 +9,11 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('forum/<int:forum_id>/', views.show_forum, name='forum'),
 
+    # Topic
+    path('forum/<int:forum_id>/topic/create', views.add_topic, name='add_topic'),
+
     # User
+    path('user/<username>/essentials/', views.user, name='forum_profile_essentials'),
     path('user/<username>/', views.user, name='forum_profile'),
     path('users/', views.users, name='forum_users'),
 

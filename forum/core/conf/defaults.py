@@ -40,6 +40,8 @@ TAGLINE = 'Django based forum engine'
 
 NOTICE = ''
 
+ENABLE_POLLS = True
+
 # SMILE Extension
 SMILES_SUPPORT = True
 EMOTION_SMILE = f'<img src="{STATIC_URL}forum/img/smilies/smile.png"/>'

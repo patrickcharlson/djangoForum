@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
@@ -8,7 +9,7 @@ from django.urls import reverse
 
 from .core.conf import settings
 from .core.utils import convert_text_to_html, smiles, get_page, build_form
-from .forms import EssentialsProfileForm, UserSearchForm
+from .forms import EssentialsProfileForm, UserSearchForm, AddPostForm, PollForm
 from .models import Forum, Post, Category, Topic
 
 User = get_user_model()
@@ -75,6 +76,59 @@ def show_forum(request, forum_id):
     return render(request, 'forum/forum.html', context)
 
 
+@login_required
+def add_topic(request, forum_id):
+    forum = get_object_or_404(Forum, pk=forum_id)
+    if not forum.category.has_access(request.user):
+        raise PermissionDenied
+
+    ip = request.META.get('REMOTE_ADDR', None)
+    post_form_kwargs = {'forum': forum, 'user': request.user, 'ip': ip}
+
+    poll_form = None
+    if request.method == 'POST':
+        form = AddPostForm(request.POST, request.FILES, **post_form_kwargs)
+        if form.is_valid():
+            all_valid = True
+        else:
+            all_valid = False
+
+        if settings.ENABLE_POLLS:
+            poll_form = PollForm(request.POST)
+            if not poll_form.has_data():
+                poll_form = PollForm()
+            elif not poll_form.is_valid():
+                all_valid = False
+
+        if all_valid:
+            post = form.save()
+            if poll_form and poll_form.has_data():
+                poll_form.save(post)
+                messages.success(request, 'Topic with poll saved')
+            else:
+                messages.success(request, 'Topic saved')
+            return redirect(post.get_absolute_url())
+    else:
+        form = AddPostForm(
+            initial={
+                'markup': request.user.forum_profile.markup,
+                'subscribe': request.user.forum_profile.auto_subscribe
+            },
+            **post_form_kwargs
+        )
+        if settings.ENABLE_POLLS and forum_id:
+            poll_form = PollForm()
+    context = {
+        'forum': forum,
+        'create_poll_form': poll_form,
+        'form': form,
+        'form_url': request.path,
+        'back_url': forum.get_absolute_url()
+    }
+
+    return render(request, 'forum/add_topic.html', context)
+
+
 def user(request, username, section='essentials'):
     form_class = EssentialsProfileForm
     template = 'forum/profile/profile_essentials.html'
@@ -105,7 +159,7 @@ def users(request):
     _users = User.objects.filter(forum_profile__post_count__gte=settings.POST_USER_SEARCH).order_by('username')
     form = UserSearchForm(request.GET)
     _users = form.filter(_users)
-    context = {'users_page': get_page(_users, request, settings.USERS_PAGE_SIZE)}
+    context = {'users_page': get_page(_users, request, settings.USERS_PAGE_SIZE), 'form': form}
     return render(request, 'forum/users.html', context)
 
 

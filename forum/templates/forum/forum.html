@@ -9,7 +9,7 @@
       <div
         class="pagelink conl">{% include 'forum/paginator.html' with page=topics_page request=request only %}</div>
       {% if user.is_authenticated %}
-        <p class="postlink conr"><a href="">{% trans "New topic" %}</a></p>
+        <p class="postlink conr"><a href="{% url 'forum:add_topic' forum.id %}">{% trans "New topic" %}</a></p>
       {% endif %}
       <ul>
         <li><a href="{% url 'forum:index' %}">{% trans "Root" %}</a></li>
@@ -27,7 +27,7 @@
     </h2>
     <div class="box">
       <div class="inbox">
-        <table cellspacing="0">
+        <table>
           <thead>
           <tr>
             <th class="tcl" scope="col">{% trans "Topic" %}</th>
